@@ -1,25 +1,38 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import ContactForm from "./components/ContactForm/ContactForm"
+import ContactItem from "./components/ContactItem/ContactItem"
+import ContactList from "./components/ContactList/ContactList"
 
-function App() {
+export default function App() {
+  const [contact, setContact] = useState("")
+  const [contacts, setContacts] = useState([])
+
+  const addContact = () => {
+    const contact = contact.trim()
+    if (!contact) return
+
+    const newContact = {
+      id: Date.now() + Math.random(),
+      contact
+    }
+
+    setContacts(prev => ({...prev, newContact}))
+    setContact("")
+  }
+
+  const deleteContact = (id) => {setContacts(prev => prev.filter(c => c.id !== id))}
+
+  useEffect(() => {console.log("Contact list changed:", contact), [contact]})
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='app'>
+      <div className='app__container'>
+        <h1 className='app__title'>Contact List</h1>
+        <ContactForm />
+        <ContactList />
+      </div>
     </div>
-  );
+  )
 }
-
-export default App;
